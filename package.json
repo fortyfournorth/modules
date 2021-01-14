@@ -15,7 +15,8 @@
     "bootstrap": "lerna bootstrap",
     "clean": "lerna run --parallel clean",
     "release": "lerna publish",
-    "build": "lerna run build"
+    "build": "lerna run build",
+    "test": "lerna run --parallel test"
   },
   "devDependencies": {
     "@types/jest": "^26.0.20",
