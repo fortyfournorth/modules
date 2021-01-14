@@ -1,0 +1,8 @@
+node_modules
+public
+provisions
+coverage
+build
+docs
+db
+**/dist/**
