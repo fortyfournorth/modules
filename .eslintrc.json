@@ -15,6 +15,6 @@
     "linebreak-style": ["error", "unix"],
     "quotes": ["error", "double", { "allowTemplateLiterals": true }],
     "semi": ["error", "always"],
-    "no-console": ["error", { "allow": ["info", "error"] }]
+    "no-console": ["error", { "allow": ["info", "error", "debug"] }]
   }
 }
