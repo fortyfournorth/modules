@@ -1,5 +1,5 @@
 module.exports = {
-    roots: ["<rootDir>/src"],
+    roots: ["<rootDir>/packages/"],
     setupFilesAfterEnv: ["jest-extended"],
     testEnvironment: "node",
     testMatch: ["**/__tests__/**/*.+(ts|tsx|js)", "**/?(*.)+(spec|test).+(tsx|ts|js)"],

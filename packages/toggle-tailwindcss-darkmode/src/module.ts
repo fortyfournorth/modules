@@ -39,7 +39,13 @@ const getDarkModePref = () => {
         : getSystemDarkModePref();
 };
 
-const getHTMLNode = () => document.querySelector("html");
+const getHTMLNode = () => {
+    if (documentGlobal) {
+        return document.querySelector("html");
+    } else {
+        return undefined;
+    }
+};
 
 const getDarkMode = (): boolean => {
     return getHTMLNode()?.classList.contains("dark") || false;
@@ -48,14 +54,16 @@ const getDarkMode = (): boolean => {
 const setDarkMode = (value: boolean): void => {
     const htmlNode = getHTMLNode();
 
-    if (documentGlobal) {
-        document.cookie = `${tailwindcssDarkModeCookieName}=${String(value)}`;
-    }
+    if (htmlNode) {
+        if (documentGlobal) {
+            document.cookie = `${tailwindcssDarkModeCookieName}=${String(value)}`;
+        }
 
-    if (value) {
-        htmlNode?.classList.add("dark");
-    } else {
-        htmlNode?.classList.remove("dark");
+        if (value) {
+            htmlNode?.classList.add("dark");
+        } else {
+            htmlNode?.classList.remove("dark");
+        }
     }
 };
 
