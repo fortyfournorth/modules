@@ -1,3 +1,5 @@
+import { Cookies, SameSiteValues } from "@44north/cookies";
+
 const windowGlobal = typeof window !== "undefined" && window;
 const documentGlobal = typeof document !== "undefined" && document;
 
@@ -22,21 +24,12 @@ const getSystemDarkModePref = () => {
 };
 
 const getDarkModePref = () => {
-    const cookies: { [key: string]: string } = {};
+    const cookies = new Cookies({
+        sameSite: SameSiteValues.Strict
+    });
+    const darkModeCooke = cookies.get(tailwindcssDarkModeCookieName);
 
-    if (documentGlobal) {
-        document.cookie
-            .split(";")
-            .map((value) => value.trim())
-            .forEach((record) => {
-                const [key, value]: string[] = record.split("=");
-                cookies[key] = value;
-            });
-    }
-
-    return cookies[tailwindcssDarkModeCookieName] !== undefined
-        ? cookies[tailwindcssDarkModeCookieName] === "true"
-        : getSystemDarkModePref();
+    return darkModeCooke !== undefined ? darkModeCooke === "true" : getSystemDarkModePref();
 };
 
 const getHTMLNode = () => {
@@ -53,10 +46,13 @@ const getDarkMode = (): boolean => {
 
 const setDarkMode = (value: boolean): void => {
     const htmlNode = getHTMLNode();
+    const cookies = new Cookies({
+        sameSite: SameSiteValues.Strict
+    });
 
     if (htmlNode) {
         if (documentGlobal) {
-            document.cookie = `${tailwindcssDarkModeCookieName}=${String(value)}`;
+            cookies.set(tailwindcssDarkModeCookieName, String(value));
         }
 
         if (value) {

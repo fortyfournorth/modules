@@ -1,6 +1,6 @@
 {
   "name": "@44north/toggle-tailwindcss-darkmode",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "main": "./dist/module.js",
   "types": "./dist/module.d.ts",
   "files": [
@@ -34,5 +34,8 @@
     "jsdom": "^16.4.0",
     "ts-jest": "^26.4.4",
     "typescript": "^4.1.3"
+  },
+  "dependencies": {
+    "@44north/cookies": "^0.0.0"
   }
 }
