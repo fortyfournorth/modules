@@ -1,0 +1,13 @@
+{
+  "name": "@44north/prettier-config",
+  "version": "0.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "prettier": "@44north/prettier-config",
+  "peerDependencies": {
+    "prettier": "^2.2.1"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
