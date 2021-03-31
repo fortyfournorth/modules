@@ -43,3 +43,14 @@ const value = "Foo Bar Baz";
 
 console.log(slugify(value)); // -> foo-bar-baz
 ```
+
+## isValidEmailAddress
+
+```js
+import { isValidEmailAddress } from "@44north/utilities";
+
+const value = "Foo Bar Baz";
+
+console.log(isValidEmailAddress(value)); // -> false
+console.log(isValidEmailAddress("test@example.com")); // -> true
+```

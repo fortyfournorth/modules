@@ -32,3 +32,24 @@ export const slugify = (value: string) =>
         .replace(new RegExp("[^a-z0-9-_]", "gi"), "-")
         .replace(new RegExp("-{2,}", "g"), "-")
         .replace(new RegExp("-?([a-z0-9][a-z0-9-_]{1,}[a-z0-9])-?", "g"), "$1");
+
+/**
+ * A Utiltity to validate if the provided string matches an valid email address pattern
+ * @param value The string to be evaludated as an email address
+ * @returns is the provided value matches the pattern of a valid email address
+ */
+export const isValidEmailAddress = (value: string): boolean => {
+    if (String(value).length < 5) {
+        return false;
+    }
+    if (String(value).trim() !== value) {
+        return false;
+    }
+
+    return (
+        new RegExp(
+            "^([0-9]{4,}|[a-z][a-z0-9-_+\\.]{1,}[a-z0-9])@([a-z0-9][a-z0-9-_\\.+]{1,}[a-z0-9]\\.[a-z]{2,10}|\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}|\\[\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\])$",
+            "i"
+        ).test(String(value)) && !new RegExp("[\\._-]{2,}", "i").test(String(value))
+    );
+};
