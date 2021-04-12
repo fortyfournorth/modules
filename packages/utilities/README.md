@@ -54,3 +54,13 @@ const value = "Foo Bar Baz";
 console.log(isValidEmailAddress(value)); // -> false
 console.log(isValidEmailAddress("test@example.com")); // -> true
 ```
+
+## asBool
+
+```js
+import { asBool } from "@44north/utilities";
+
+const value = "True";
+
+console.log(asBool(value)); // -> true: boolean
+```
