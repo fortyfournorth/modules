@@ -1,3 +1,8 @@
+export interface IConditionalClasses {
+    [className: string]: boolean;
+}
+export type AddInputValue = string | string[] | ClassNames | IConditionalClasses;
+export type RemoveInputValue = string | string[] | RegExp | RegExp[];
 /**
  * A Class to help Manage Classes for Components
  */
@@ -20,20 +25,39 @@ class ClassNames {
         return this.list();
     }
 
-    constructor(classes?: string | string[] | ClassNames) {
-        if (classes) {
-            this.add(classes);
+    /**
+     * Check if the Provided Value is an Instance of `ClassNames`
+     * @param value Value to Check
+     * @returns if the value is an instance of `ClassNames`
+     */
+    public isClassNames(value: any): value is ClassNames {
+        if (value instanceof ClassNames) {
+            return true;
         }
+        return false;
+    }
+
+    constructor(...classes: AddInputValue[]) {
+        if (classes) {
+            classes.forEach((value) => this.add(value));
+        }
+    }
+
+    private isArray(value: any): value is [] {
+        if (value instanceof Array) {
+            return true;
+        }
+        return false;
     }
 
     private makeArray<T = any>(value: T | T[]): T[] {
         const splitRegEx = new RegExp("\\s{1,}", "g");
         let output: any[] = [];
 
-        if (value instanceof ClassNames) {
+        if (this.isClassNames(value)) {
             output = output.concat(value.list().split(splitRegEx));
         } else {
-            if (!(value instanceof Array)) {
+            if (!this.isArray(value)) {
                 if (typeof value === "string") {
                     String(value)
                         .split(splitRegEx)
@@ -91,15 +115,22 @@ class ClassNames {
      *
      * @param input value(s) to be added to this instance
      */
-    public add(input: string | string[] | ClassNames): ClassNames {
-        const classes = this.makeArray<string>(input as string);
-
-        classes.forEach((value) => {
-            if (!this.has(value)) {
-                this.classes.push(value);
+    public add(...inputValues: AddInputValue[]): ClassNames {
+        inputValues.forEach((input) => {
+            if (typeof input === "object" && !this.isArray(input) && !this.isClassNames(input)) {
+                input = Object.entries(input)
+                    .filter(([key, value]) => value)
+                    .map(([key]) => key);
             }
-        });
 
+            const classes = this.makeArray<string>(input as string);
+
+            classes.forEach((value) => {
+                if (!this.has(value)) {
+                    this.classes.push(value);
+                }
+            });
+        });
         return this;
     }
 
@@ -107,25 +138,27 @@ class ClassNames {
      * Remove a value from this instance
      * @param input value(s) or pattern(s) to remove
      */
-    public remove(input: string | string[] | RegExp | RegExp[]): ClassNames {
-        const classes = this.makeArray<string | RegExp>(input);
+    public remove(...inputValues: RemoveInputValue[]): ClassNames {
+        inputValues.forEach((input) => {
+            const classes = this.makeArray<string | RegExp>(input);
 
-        classes.forEach((value) => {
-            let thisIndex = 0;
+            classes.forEach((value) => {
+                let thisIndex = 0;
 
-            while (thisIndex >= 0) {
-                thisIndex = this.classes.findIndex((className) => {
-                    if (value instanceof RegExp) {
-                        return value.test(className);
-                    } else {
-                        return className === value;
+                while (thisIndex >= 0) {
+                    thisIndex = this.classes.findIndex((className) => {
+                        if (value instanceof RegExp) {
+                            return value.test(className);
+                        } else {
+                            return className === value;
+                        }
+                    });
+
+                    if (thisIndex >= 0) {
+                        this.classes.splice(thisIndex, 1);
                     }
-                });
-
-                if (thisIndex >= 0) {
-                    this.classes.splice(thisIndex, 1);
                 }
-            }
+            });
         });
 
         return this;
@@ -138,10 +171,12 @@ class ClassNames {
      *
      * @param classes Add additional classes before listing
      */
-    public list(classes?: string | string[] | ClassNames): string {
-        if (classes) {
-            this.add(classes);
-        }
+    public list(...inputValues: AddInputValue[]): string {
+        inputValues.forEach((input) => {
+            if (input) {
+                this.add(input);
+            }
+        });
         return this.classes.join(" ");
     }
 
@@ -172,6 +207,28 @@ class ClassNames {
      */
     public isEmpty() {
         return this.length === 0;
+    }
+
+    /**
+     * Static accessor to add ClassNames
+     *
+     * **Shortcut Of** `new ClassNames().add(value)`
+     * @param value classes to add to new instance of ClassNames
+     * @returns an Instance of ClassNames
+     */
+    public static add(value: AddInputValue) {
+        return new ClassNames(value);
+    }
+
+    /**
+     * Static accessor to isClassNames
+     *
+     * **Shortcut Of** `new ClassNames().isClassNames(value)`
+     * @param value value to check
+     * @returns if the provided value is an instance of ClassNames
+     */
+    public static isClassNames(value: any) {
+        return new ClassNames().isClassNames(value);
     }
 }
 

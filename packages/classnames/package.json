@@ -1,6 +1,6 @@
 {
   "name": "@44north/classnames",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "main": "./dist/module.js",
   "types": "./dist/module.d.ts",
   "files": [

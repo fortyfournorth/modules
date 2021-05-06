@@ -65,6 +65,56 @@ describe("ClassNames", () => {
                 expect(classes.has(value)).toEqual(true);
             });
         });
+
+        describe("multiple agrguments", () => {
+            test("returns the expected result", () => {
+                const value = new ClassNames("a", "b", "c").list();
+                expect(value).toEqual("a b c");
+            });
+
+            test("returns the expected result when passed to add", () => {
+                const value = new ClassNames().add("a", "b", "c").list();
+                expect(value).toEqual("a b c");
+            });
+
+            test("returns the expected result when passed with multiple types", () => {
+                const value1 = new ClassNames().add("a", ["b", "c"]).list();
+                expect(value1).toEqual("a b c");
+                const value2 = new ClassNames().add("a", ["b"], { c: true }).list();
+                expect(value2).toEqual("a b c");
+            });
+        });
+
+        describe("conditional classes", () => {
+            test("returns only the `true` values when passed in the constructor", () => {
+                const expectedToFind = "mt-2";
+                const expectedNotToFind = "pt-2";
+
+                const conditionalClasses = {
+                    [expectedToFind]: true,
+                    [expectedNotToFind]: false
+                };
+
+                const classList = new ClassNames(conditionalClasses).list();
+
+                expect(classList).toMatch(expectedToFind);
+                expect(classList).not.toMatch(expectedNotToFind);
+            });
+
+            test("returns only the `true` values when passed with `.add`", () => {
+                const expectedToFind = "mt-2";
+                const expectedNotToFind = "pt-2";
+
+                const conditionalClasses = {
+                    [expectedToFind]: true,
+                    [expectedNotToFind]: false
+                };
+                const classList = new ClassNames().add(conditionalClasses).list();
+
+                expect(classList).toMatch(expectedToFind);
+                expect(classList).not.toMatch(expectedNotToFind);
+            });
+        });
     });
 
     describe("remove", () => {
@@ -170,6 +220,44 @@ describe("ClassNames", () => {
             const classes = new ClassNames(addedClasses);
 
             expect(classes.toString()).toMatch(addedClasses.join(" "));
+        });
+    });
+
+    describe("static add method", () => {
+        test("returns an instance of ClassNames", () => {
+            const value = ClassNames.add("me");
+
+            expect(value).toBeInstanceOf(ClassNames);
+        });
+    });
+
+    describe("isClassNames", () => {
+        test("returns true if value is an instance of ClassNames", () => {
+            const value = new ClassNames().add("me");
+
+            expect(new ClassNames().isClassNames(value)).toBeBoolean();
+            expect(new ClassNames().isClassNames(value)).toBeTrue();
+        });
+        test("returns false if value is not an instance of ClassNames", () => {
+            const value = 423;
+
+            expect(new ClassNames().isClassNames(value)).toBeBoolean();
+            expect(new ClassNames().isClassNames(value)).toBeFalse();
+        });
+    });
+
+    describe("static isClassNames method", () => {
+        test("returns true if value is an instance of ClassNames", () => {
+            const value = ClassNames.add("me");
+
+            expect(ClassNames.isClassNames(value)).toBeBoolean();
+            expect(ClassNames.isClassNames(value)).toBeTrue();
+        });
+        test("returns false if value is not an instance of ClassNames", () => {
+            const value = 423;
+
+            expect(ClassNames.isClassNames(value)).toBeBoolean();
+            expect(ClassNames.isClassNames(value)).toBeFalse();
         });
     });
 });
