@@ -1,5 +1,8 @@
 import {
     capitalize,
+    camelCase,
+    pascalCase,
+    formatPrice,
     doesKeyExists,
     slugify,
     isValidEmailAddress,
@@ -22,6 +25,145 @@ describe("utilites", () => {
         `(`returns the expected result for "$value"`, ({ value, expected }) => {
             expect(capitalize(value)).toMatch(expected);
         });
+    });
+
+    describe("camelCase", () => {
+        test("throws an error if a none string is passed in", () => {
+            expect(() => {
+                // @ts-ignore
+                camelCase(true);
+            }).toThrowError(new RegExp("boolean", "i"));
+        });
+
+        test.each`
+            value               | expected
+            ${"ReviewQuestion"} | ${"reviewQuestion"}
+            ${"Foo Bar"}        | ${"fooBar"}
+            ${"foo bar"}        | ${"fooBar"}
+            ${"foo_bar"}        | ${"fooBar"}
+            ${"foo_bar_baz"}    | ${"fooBarBaz"}
+            ${"foo_Bar"}        | ${"fooBar"}
+            ${"foo-bar"}        | ${"fooBar"}
+            ${"foo-bar-baz"}    | ${"fooBarBaz"}
+            ${"foo-Bar"}        | ${"fooBar"}
+        `(`returns the expected result for "$value"`, ({ value, expected }) => {
+            expect(camelCase(value)).toMatch(expected);
+        });
+    });
+
+    describe("pascalCase", () => {
+        test("throws an error if a none string is passed in", () => {
+            expect(() => {
+                // @ts-ignore
+                pascalCase(true);
+            }).toThrowError(new RegExp("boolean", "i"));
+        });
+
+        test.each`
+            value               | expected
+            ${"reviewquestion"} | ${"Reviewquestion"}
+            ${"ReviewQuestion"} | ${"ReviewQuestion"}
+            ${"Foo Bar"}        | ${"FooBar"}
+            ${"foo bar"}        | ${"FooBar"}
+            ${"foo_bar"}        | ${"FooBar"}
+            ${"foo_bar_baz"}    | ${"FooBarBaz"}
+            ${"foo_Bar"}        | ${"FooBar"}
+            ${"foo-bar"}        | ${"FooBar"}
+            ${"foo-bar-baz"}    | ${"FooBarBaz"}
+            ${"foo-Bar"}        | ${"FooBar"}
+        `(`returns the expected result for "$value"`, ({ value, expected }) => {
+            expect(pascalCase(value)).toMatch(expected);
+        });
+    });
+
+    describe("formatPrice", () => {
+        test("throws an error if a none string is passed in", () => {
+            expect(() => {
+                // @ts-ignore
+                pascalCase(true);
+            }).toThrowError(new RegExp("boolean", "i"));
+        });
+
+        test.each`
+            value        | expected
+            ${0.5}       | ${"$0.50"}
+            ${0.05}      | ${"$0.05"}
+            ${1}         | ${"$1.00"}
+            ${10}        | ${"$10.00"}
+            ${100}       | ${"$100.00"}
+            ${1000}      | ${"$1,000.00"}
+            ${10000}     | ${"$10,000.00"}
+            ${10000.99}  | ${"$10,000.99"}
+            ${10000.956} | ${"$10,000.96"}
+            ${10000.955} | ${"$10,000.96"}
+            ${10000.954} | ${"$10,000.95"}
+        `(`returns the expected result for $value`, ({ value, expected }) => {
+            expect(formatPrice(value)).toBe(expected);
+        });
+
+        test.each`
+            value        | expected
+            ${0.5}       | ${"€0.50"}
+            ${0.05}      | ${"€0.05"}
+            ${1}         | ${"€1.00"}
+            ${10}        | ${"€10.00"}
+            ${100}       | ${"€100.00"}
+            ${1000}      | ${"€1,000.00"}
+            ${10000}     | ${"€10,000.00"}
+            ${10000.99}  | ${"€10,000.99"}
+            ${10000.956} | ${"€10,000.96"}
+            ${10000.955} | ${"€10,000.96"}
+            ${10000.954} | ${"€10,000.95"}
+        `(`returns the expected "EUR" result for $value`, ({ value, expected }) => {
+            expect(formatPrice(value, { currency: "EUR" })).toBe(expected);
+        });
+
+        test.each`
+            value        | expected
+            ${0.5}       | ${"0,50 €"}
+            ${0.05}      | ${"0,05 €"}
+            ${1}         | ${"1,00 €"}
+            ${10}        | ${"10,00 €"}
+            ${100}       | ${"100,00 €"}
+            ${1000}      | ${"1.000,00 €"}
+            ${10000}     | ${"10.000,00 €"}
+            ${10000.99}  | ${"10.000,99 €"}
+            ${10000.956} | ${"10.000,96 €"}
+            ${10000.955} | ${"10.000,96 €"}
+            ${10000.954} | ${"10.000,95 €"}
+        `(
+            `returns the expected "EUR" and Local "de-DE" result for $value`,
+            ({ value, expected }) => {
+                const result = formatPrice(value, { currency: "EUR" }, "de-DE");
+
+                expect(result).toBe(expected);
+            }
+        );
+
+        test.each`
+            value        | expected
+            ${0.5}       | ${"$1"}
+            ${0.05}      | ${"$0"}
+            ${1}         | ${"$1"}
+            ${10}        | ${"$10"}
+            ${100}       | ${"$100"}
+            ${1000}      | ${"$1,000"}
+            ${10000}     | ${"$10,000"}
+            ${10000.99}  | ${"$10,001"}
+            ${10000.956} | ${"$10,001"}
+            ${10000.955} | ${"$10,001"}
+            ${10000.954} | ${"$10,001"}
+        `(
+            `returns the expected with formatter options result for $value`,
+            ({ value, expected }) => {
+                const result = formatPrice(value, {
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 0
+                });
+
+                expect(result).toBe(expected);
+            }
+        );
     });
 
     describe("doesKeyExists", () => {

@@ -19,9 +19,54 @@ yarn add @44north/utilities
 ```js
 import { capitalize } from "@44north/utilities";
 
-const value = "foo";
+const value = "foo bar";
 
-console.log(capitalize(value)); // -> Foo
+console.log(capitalize(value)); // -> Foo bar
+```
+
+## camelCase
+
+```js
+import { camelCase } from "@44north/utilities";
+
+const value = "foo-bar";
+
+console.log(camelCase(value)); // -> fooBar
+```
+
+## pascalCase
+
+```js
+import { pascalCase } from "@44north/utilities";
+
+const value = "foo_bar";
+
+console.log(pascalCase(value)); // -> FooBart
+```
+
+## formatPrice
+
+```js
+import { formatPrice } from "@44north/utilities";
+
+const value = 1000;
+
+console.log(formatPrice(value)); // -> "$1,000.00"
+```
+
+optionally Pass in some options to the formatter
+
+```js
+import { formatPrice } from "@44north/utilities";
+
+const value = 1000.99;
+
+console.log(
+    formatPrice(value, {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0
+    })
+); // -> "$1,001"
 ```
 
 ## doesKeyExists

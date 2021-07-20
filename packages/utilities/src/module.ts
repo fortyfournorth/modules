@@ -12,6 +12,79 @@ export const capitalize = (value: string) => {
 };
 
 /**
+ * camelCase the provided string
+ * @param value The value to be camelCased
+ * @returns the value camelCased
+ */
+export const camelCase = (value: string) => {
+    const type = typeof value;
+    if (type !== "string") {
+        throw new Error(`Expected a string to be passed into capitalize. Got ${type}`);
+    }
+
+    const split = value.split(new RegExp("[\\s_-]", "g")).filter((record) => record.length > 0);
+
+    return split
+        .map((record, index) => {
+            if (index === 0) {
+                return record.charAt(0).toLowerCase() + record.slice(1);
+            } else {
+                return capitalize(record);
+            }
+        })
+        .join("");
+};
+
+/**
+ * pascalCase the provided string
+ * @param value The value to be PascalCased
+ * @returns the value PascalCased
+ */
+export const pascalCase = (value: string) => {
+    const type = typeof value;
+    if (type !== "string") {
+        throw new Error(`Expected a string to be passed into capitalize. Got ${type}`);
+    }
+
+    const split = value.split(new RegExp("[\\s_-]", "g")).filter((record) => record.length > 0);
+
+    return split.map((record) => capitalize(record)).join("");
+};
+
+/**
+ * Formats a passed number into a readable price string
+ *
+ * >**NOTE**
+ * >
+ * > Replaces non standard spaces with regular spaces
+ *
+ * @param price The price to format
+ * @param options to pass to Intl - defaults to
+ * `{
+ *      style: "currency",
+ *      currency: "CAD",
+ *      currencyDisplay: "narrowSymbol"
+ *  }`
+ * @param locales The Local to use - defaults to `en-US`
+ * @returns A formatted price string
+ */
+export const formatPrice = (
+    price: number,
+    options: Intl.NumberFormatOptions = {},
+    locales: string | string[] = "en-US"
+) => {
+    const defaults = {
+        style: "currency",
+        currency: "CAD",
+        currencyDisplay: "narrowSymbol"
+    };
+
+    return new Intl.NumberFormat(locales, Object.assign({ ...defaults }, { ...options }))
+        .format(price)
+        .replace(new RegExp("\\s{1,}", "g"), " ");
+};
+
+/**
  * A Utility to quickly check for the existitance of a key on an object
  * @param obj The Object to check for the provided Key on
  * @param key The Key to check for on the provided Object
