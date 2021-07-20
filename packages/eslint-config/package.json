@@ -1,6 +1,6 @@
 {
   "name": "@44north/eslint-config",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "ESLint and Prettier Config for @44North",
   "keywords": [
     "typescript",
@@ -18,7 +18,7 @@
   "peerDependencies": {
     "@typescript-eslint/eslint-plugin": "^4.14.1",
     "@typescript-eslint/parser": "^4.14.1",
-    "eslint": "^7.8.1",
+    "eslint": "^7.17.0",
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-html": "^6.1.0",
     "eslint-plugin-import": "^2.22.0",
@@ -28,12 +28,13 @@
     "eslint-plugin-prettier": "^3.1.4",
     "eslint-plugin-react": "^7.20.6",
     "eslint-plugin-react-hooks": "^4.1.2",
-    "prettier": "^2.1.1"
+    "prettier": "^2.2.1"
   },
   "devDependencies": {
+    "@types/jest": "^26.0.20",
     "@typescript-eslint/eslint-plugin": "^4.14.1",
     "@typescript-eslint/parser": "^4.14.1",
-    "eslint": "^7.8.1",
+    "eslint": "^7.17.0",
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-html": "^6.1.0",
     "eslint-plugin-import": "^2.22.0",
@@ -43,7 +44,7 @@
     "eslint-plugin-prettier": "^3.1.4",
     "eslint-plugin-react": "^7.20.6",
     "eslint-plugin-react-hooks": "^4.1.2",
-    "prettier": "^2.1.1"
+    "prettier": "^2.2.1"
   },
   "scripts": {
     "lint": "eslint .",

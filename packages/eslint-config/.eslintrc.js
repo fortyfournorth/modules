@@ -53,7 +53,7 @@ module.exports = {
                 allowTemplateLiterals: true
             }
         ],
-        "react-hooks/exhaustive-deps": "warn",
+        "react-hooks/exhaustive-deps": "off",
         "react-hooks/rules-of-hooks": "error",
         semi: ["error", "always"]
     }
