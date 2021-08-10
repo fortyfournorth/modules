@@ -85,6 +85,42 @@ export const formatPrice = (
 };
 
 /**
+ * returns is the `values` starts with the provided `condition`
+ *
+ * @param value The Value to Check Against
+ * @param condition The Value to Check For
+ * @param flags Any Flags to be passed to RegExp
+ * @returns If the `value` starts with the `condition`
+ */
+export const startsWith = (value: string, condition: string, flags = "i"): boolean => {
+    return new RegExp(`^${String(condition)}`, flags).test(String(value));
+};
+
+/**
+ * returns is the `values` ends with the provided `condition`
+ *
+ * @param value The Value to Check Against
+ * @param condition The Value to Check For
+ * @param flags Any Flags to be passed to RegExp
+ * @returns If the `value` ends with the `condition`
+ */
+export const endsWith = (value: string, condition: string, flags = "i"): boolean => {
+    return new RegExp(`${String(condition)}$`, flags).test(String(value));
+};
+
+/**
+ * returns is the `values` contains the provided `condition`
+ *
+ * @param value The Value to Check Against
+ * @param condition The Value to Check For
+ * @param flags Any Flags to be passed to RegExp
+ * @returns If the `value` contains the `condition`
+ */
+export const contains = (value: string, condition: string, flags = "i"): boolean => {
+    return new RegExp(`${String(condition)}`, flags).test(String(value));
+};
+
+/**
  * A Utility to quickly check for the existitance of a key on an object
  * @param obj The Object to check for the provided Key on
  * @param key The Key to check for on the provided Object
@@ -150,7 +186,7 @@ export const asBool = (value: string | number | boolean): boolean => {
     }
 };
 
-type SortFunction = (valueA: any, valueB: any) => number;
+type SortFunction = (valueA: any, valueB: any) => -1 | 0 | 1;
 /**
  * Sorts an array of objects by a key.
  * @param arr The Array of Objects to be Sorted
@@ -167,7 +203,7 @@ export const sortObjectArrayByKey = <T = object>(
 
     if (typeof sortFunction !== "function") {
         if (String(sortFunction).toLowerCase() === "desc") {
-            sortFunction = (valueA: any, valueB: any): number => {
+            sortFunction = (valueA, valueB) => {
                 if (valueA > valueB) {
                     return -1;
                 }
@@ -177,7 +213,7 @@ export const sortObjectArrayByKey = <T = object>(
                 return 0;
             };
         } else {
-            sortFunction = (valueA: any, valueB: any): number => {
+            sortFunction = (valueA, valueB) => {
                 if (valueA < valueB) {
                     return -1;
                 }

@@ -150,3 +150,48 @@ const sortedDataCustom = sortObjectArrayByKey(startingData, "value", (a, b) => {
 });
 console.log(sortedDataCustom.map((o) => o.value).join(",")); // -> 25,50,100
 ```
+
+## startsWith
+
+returns a boolean if the provided value contains the provided condition string.
+
+```js
+import { startsWith } from "@44north/utilities";
+
+const value = "foobar";
+if (startsWith(value, "foo")) {
+    // it's true!
+}
+```
+
+optionally, you can pass `RegExp` flags as a third parameter. case insenitive is on my default.
+
+## endsWith
+
+returns a boolean if the provided value contains the provided condition string.
+
+```js
+import { endsWith } from "@44north/utilities";
+
+const value = "foobar";
+if (endsWith(value, "bar")) {
+    // it's true!
+}
+```
+
+optionally, you can pass `RegExp` flags as a third parameter. case insenitive is on my default.
+
+## contains
+
+returns a boolean if the provided value contains the provided condition string.
+
+```js
+import { contains } from "@44north/utilities";
+
+const value = "foobar";
+if (contains(value, "oba")) {
+    // it's true!
+}
+```
+
+optionally, you can pass `RegExp` flags as a third parameter. case insenitive is on my default.

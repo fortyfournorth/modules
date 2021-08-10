@@ -7,7 +7,10 @@ import {
     slugify,
     isValidEmailAddress,
     asBool,
-    sortObjectArrayByKey
+    sortObjectArrayByKey,
+    startsWith,
+    endsWith,
+    contains
 } from "./module";
 
 describe("utilites", () => {
@@ -162,6 +165,61 @@ describe("utilites", () => {
                 });
 
                 expect(result).toBe(expected);
+            }
+        );
+    });
+
+    describe("startsWith", () => {
+        test.each`
+            value               | condition   | flags        | expected
+            ${"reviewquestion"} | ${"Review"} | ${undefined} | ${true}
+            ${"reviewquestion"} | ${"Review"} | ${""}        | ${false}
+            ${"reviewquestion"} | ${"Foo"}    | ${undefined} | ${false}
+            ${"reviewquestion"} | ${"Foo"}    | ${""}        | ${false}
+            ${12345}            | ${123}      | ${""}        | ${true}
+            ${12345}            | ${678}      | ${""}        | ${false}
+        `(
+            `returns the expected result for "$value" with "$condition" and flags "$flags"`,
+            ({ value, condition, flags, expected }) => {
+                expect(startsWith(value, condition, flags)).toBe(expected);
+            }
+        );
+    });
+
+    describe("endsWith", () => {
+        test.each`
+            value               | condition     | flags        | expected
+            ${"reviewquestion"} | ${"question"} | ${undefined} | ${true}
+            ${"reviewquestion"} | ${"Question"} | ${""}        | ${false}
+            ${"reviewquestion"} | ${"Pie"}      | ${undefined} | ${false}
+            ${"reviewquestion"} | ${"Foo"}      | ${""}        | ${false}
+            ${12345}            | ${345}        | ${""}        | ${true}
+            ${12345}            | ${678}        | ${""}        | ${false}
+        `(
+            `returns the expected result for "$value" with "$condition" and flags "$flags"`,
+            ({ value, condition, flags, expected }) => {
+                expect(endsWith(value, condition, flags)).toBe(expected);
+            }
+        );
+    });
+
+    describe("contains", () => {
+        test.each`
+            value               | condition           | flags        | expected
+            ${"reviewquestion"} | ${"ewques"}         | ${undefined} | ${true}
+            ${"reviewquestion"} | ${"ewQues"}         | ${""}        | ${false}
+            ${"reviewquestion"} | ${"reviewquestion"} | ${undefined} | ${true}
+            ${"reviewquestion"} | ${"reviewQuestion"} | ${undefined} | ${true}
+            ${"reviewquestion"} | ${"Pie"}            | ${undefined} | ${false}
+            ${"reviewquestion"} | ${"Foo"}            | ${""}        | ${false}
+            ${12345}            | ${234}              | ${""}        | ${true}
+            ${12345}            | ${678}              | ${""}        | ${false}
+            ${12345}            | ${234}              | ${undefined} | ${true}
+            ${12345}            | ${678}              | ${undefined} | ${false}
+        `(
+            `returns the expected result for "$value" with "$condition" and flags "$flags"`,
+            ({ value, condition, flags, expected }) => {
+                expect(contains(value, condition, flags)).toBe(expected);
             }
         );
     });
