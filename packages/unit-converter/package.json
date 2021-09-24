@@ -1,0 +1,39 @@
+{
+  "name": "@44north/unitconverter",
+  "version": "1.0.0",
+  "description": "The UnitConverter",
+  "main": "./dist/module.js",
+  "types": "./dist/module.d.ts",
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fortyfournorth/modules.git"
+  },
+  "homepage": "https://github.com/fortyfournorth/modules",
+  "bugs": {
+    "url": "https://github.com/fortyfournorth/modules/issues"
+  },
+  "license": "MIT",
+  "scripts": {
+    "build": "yarn clean && yarn compile",
+    "compile": "tsc -p tsconfig.build.json",
+    "clean": "rm -rf ./dist ./coverage",
+    "lint": "tslint src/*.ts",
+    "test": "jest --coverage",
+    "watch": "jest --watch",
+    "dev": "jest --watch"
+  },
+  "devDependencies": {
+    "@types/jest": "^24.0.23",
+    "jest": "^24.9.0",
+    "prettier": "^1.19.1",
+    "ts-jest": "^24.2.0",
+    "tslint": "^5.20.1",
+    "typescript": "^3.7.2"
+  }
+}
