@@ -1,6 +1,6 @@
 {
-  "name": "@44north/releaseBranchUtilities",
-  "version": "0.0.0",
+  "name": "@44north/release-branch-utilities",
+  "version": "0.1.0",
   "main": "./dist/module.js",
   "types": "./dist/module.d.ts",
   "files": [
@@ -32,5 +32,6 @@
     "jest-extended": "^0.11.5",
     "ts-jest": "^26.4.4",
     "typescript": "^4.1.3"
-  }
+  },
+  "gitHead": "7cf55ca8d05ad835e3413654284c298c10bf6b18"
 }

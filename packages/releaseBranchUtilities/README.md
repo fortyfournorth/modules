@@ -1,23 +1,23 @@
-# @44north/releaseBranchUtilities
+# @44north/release-branch-utilities
 
-A Module containing a number of small releaseBranchUtilities to use in your applications
+A Module containing a number of small release-branch-utilities to use in your applications
 
 ## Install
 
 ```
-npm install @44north/releaseBranchUtilities
+npm install @44north/release-branch-utilities
 ```
 
 or
 
 ```
-yarn add @44north/releaseBranchUtilities
+yarn add @44north/release-branch-utilities
 ```
 
 ## Usage
 
 ```ts
-import { ReleaseBranchUtilities } from "@44north/releaseBranchUtilities";
+import { ReleaseBranchUtilities } from "@44north/release-branch-utilities";
 
 const utl = new ReleaseBranchUtilities();
 ```
