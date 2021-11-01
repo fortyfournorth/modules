@@ -5,6 +5,18 @@ interface IReleaseBranchData {
     patch: number;
 }
 
+export interface IReleaseBranchUtilitiesConfig {
+    RegExpVersion: string | RegExp;
+    majorBranchPrefix: string;
+    minorBranchPrefix: string;
+    patchBranchPrefix: string;
+}
+
+// interface IReleaseBranchUtilities {
+
+//     config(data: keyof IReleaseBranchUtilitiesConfig, value: string | RegExp): this;
+// }
+
 /**
  * This utility is used to work with Semantic Release Branches/Labels/Tags/ from Git
  * to help manage nightly builds and sequencing
@@ -13,10 +25,90 @@ class ReleaseBranchUtilities {
     private data: IReleaseBranchData[] = [];
     private RegExpVersion = new RegExp("([1-9]?[0-9]{1,}\\.[1-9]?[0-9]{1,}\\.[1-9]?[0-9]{1,})");
 
-    constructor(data?: string | string[]) {
+    private majorBranchPrefix = "Release-v";
+    private minorBranchPrefix = "Release-v";
+    private patchBranchPrefix = "Patch-v";
+
+    constructor(
+        data?:
+            | string
+            | string[]
+            | Partial<IReleaseBranchUtilitiesConfig & { data?: string | string[] }>
+    ) {
         if (data) {
-            this.addEntry(data);
+            if (typeof data === "string" || Array.isArray(data)) {
+                this.addEntry(data);
+            } else {
+                this.config(
+                    Object.fromEntries(Object.entries(data).filter(([key]) => key !== "data"))
+                );
+                if (data.data) {
+                    this.addEntry(data.data);
+                }
+            }
         }
+    }
+
+    public config(): Readonly<IReleaseBranchUtilitiesConfig>;
+    public config(data: Partial<IReleaseBranchUtilitiesConfig>): this;
+    public config(key: keyof IReleaseBranchUtilitiesConfig): string;
+    public config(key: "RegExpVersion"): RegExp;
+    public config(key: keyof IReleaseBranchUtilitiesConfig, value: string): this;
+    public config(key: "RegExpVersion", value: string | RegExp): this;
+    public config(
+        data?: Partial<IReleaseBranchUtilitiesConfig> | keyof IReleaseBranchUtilitiesConfig,
+        value?: string | RegExp
+    ) {
+        if (typeof data === "undefined") {
+            const current = Object.freeze({
+                RegExpVersion: this.RegExpVersion,
+                majorBranchPrefix: this.majorBranchPrefix,
+                minorBranchPrefix: this.minorBranchPrefix,
+                patchBranchPrefix: this.patchBranchPrefix
+            });
+            return current;
+        }
+
+        if (typeof data === "string") {
+            const key = data;
+
+            if (typeof value === "undefined") {
+                if (this[key]) {
+                    return this[key];
+                } else {
+                    throw new Error(`Unknown Configuration Key ${key}`);
+                }
+            } else {
+                switch (key) {
+                    case "RegExpVersion":
+                        if (value instanceof RegExp) {
+                            this[key] = value;
+                        } else {
+                            this[key] = new RegExp(value, "i");
+                        }
+                        break;
+                    case "majorBranchPrefix":
+                    case "minorBranchPrefix":
+                    case "patchBranchPrefix":
+                        this[key] = String(value || "");
+                        break;
+                    default:
+                        throw new Error(`Unknown Configuration Key ${key}`);
+                }
+            }
+        } else {
+            Object.entries(data).forEach(([key, value]) => {
+                const thisKey: keyof IReleaseBranchUtilitiesConfig =
+                    key as keyof IReleaseBranchUtilitiesConfig;
+                if (thisKey === "RegExpVersion") {
+                    this.config(thisKey, value);
+                } else {
+                    this.config(thisKey, String(value));
+                }
+            });
+        }
+
+        return this;
     }
 
     /**
@@ -172,11 +264,13 @@ class ReleaseBranchUtilities {
 
         switch (semvar.toLowerCase()) {
             case "major":
-                return `Release-v${current.major + 1}.0.0`;
+                return `${this.majorBranchPrefix}${current.major + 1}.0.0`;
             case "minor":
-                return `Release-v${current.major}.${current.minor + 1}.0`;
+                return `${this.minorBranchPrefix}${current.major}.${current.minor + 1}.0`;
             default:
-                return `Patch-v${current.major}.${current.minor}.${current.patch + 1}`;
+                return `${this.patchBranchPrefix}${current.major}.${current.minor}.${
+                    current.patch + 1
+                }`;
         }
     }
 

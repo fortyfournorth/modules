@@ -1,4 +1,4 @@
-import { ReleaseBranchUtilities } from "./module";
+import { ReleaseBranchUtilities, IReleaseBranchUtilitiesConfig } from "./module";
 
 describe("releaseBranchUtilities", () => {
     const testData = [
@@ -14,6 +14,136 @@ describe("releaseBranchUtilities", () => {
             const utl = new ReleaseBranchUtilities(testData);
 
             expect(utl.hasEntry(testData[0])).toBeTrue();
+        });
+
+        test("sets configureation", () => {
+            const testKey = "patchBranchPrefix";
+            const testValue = "PV-";
+            const utl = new ReleaseBranchUtilities({ [testKey]: testValue });
+
+            expect(utl.config()).toHaveProperty(testKey, testValue);
+        });
+
+        test("sets configureation with data", () => {
+            const testKey = "patchBranchPrefix";
+            const testValue = "PV-";
+            const utl = new ReleaseBranchUtilities({ [testKey]: testValue, data: testData });
+
+            expect(utl.config()).toHaveProperty(testKey, testValue);
+            expect(utl.hasEntry(testData[0])).toBeTrue();
+        });
+    });
+
+    describe("config", () => {
+        test("throws an error if unknown key is passed", () => {
+            const utl = new ReleaseBranchUtilities();
+
+            expect(() => {
+                // @ts-ignore - I am Checking for an Error Here
+                utl.config("foo", "bar");
+            }).toThrow(new RegExp("Unknown Configuration Key"));
+
+            expect(() => {
+                // @ts-ignore - I am Checking for an Error Here
+                utl.config("foo");
+            }).toThrow(new RegExp("Unknown Configuration Key"));
+        });
+
+        test("returns read only object when no args are passed", () => {
+            const utl = new ReleaseBranchUtilities();
+
+            const testSet = utl.config();
+            expect(testSet).toMatchObject(
+                expect.objectContaining({
+                    majorBranchPrefix: expect.toBeString(),
+                    minorBranchPrefix: expect.toBeString(),
+                    patchBranchPrefix: expect.toBeString(),
+                    RegExpVersion: expect.any(RegExp)
+                })
+            );
+            expect(testSet).toBeFrozen();
+
+            expect(() => {
+                // @ts-ignore - I am looking for an error to be thrown here
+                testSet.minorBranchPrefix = "PIE";
+            }).toThrow(new RegExp("read only", "i"));
+        });
+
+        (
+            [
+                {
+                    key: "majorBranchPrefix",
+                    value: "MAJOR-"
+                },
+                {
+                    key: "minorBranchPrefix",
+                    value: "Minor-"
+                },
+                {
+                    key: "patchBranchPrefix",
+                    value: "PV-"
+                }
+            ] as { key: keyof IReleaseBranchUtilitiesConfig; value: string }[]
+        ).forEach((testCase) => {
+            describe(testCase.key, () => {
+                test("is gettable", () => {
+                    const testKey = testCase.key;
+                    const testValue = testCase.value;
+                    const utl = new ReleaseBranchUtilities({
+                        [testKey]: testValue
+                    });
+
+                    expect(utl.config()).toHaveProperty(testKey, testValue);
+                });
+                test("is gettable with key", () => {
+                    const testKey = testCase.key;
+                    const testValue = testCase.value;
+                    const utl = new ReleaseBranchUtilities({
+                        [testKey]: testValue
+                    });
+
+                    expect(utl.config(testKey)).toEndWith(testValue);
+                });
+
+                test("is settable with key", () => {
+                    const testKey = testCase.key;
+                    const testValue = testCase.value;
+                    const utl = new ReleaseBranchUtilities();
+
+                    utl.config(testKey, testValue);
+
+                    expect(utl.config(testKey)).toEndWith(testValue);
+                });
+
+                test("is settable with object", () => {
+                    const testKey = testCase.key;
+                    const testValue = testCase.value;
+                    const utl = new ReleaseBranchUtilities();
+
+                    utl.config({ [testKey]: testValue });
+
+                    expect(utl.config(testKey)).toEndWith(testValue);
+                });
+            });
+        });
+
+        describe("RegExpVersion", () => {
+            test("is gettable", () => {
+                const testKey = "RegExpVersion";
+                const testValue = new RegExp("\\d\\.\\d\\.\\d", "i");
+                const utl = new ReleaseBranchUtilities({ [testKey]: testValue });
+
+                expect(utl.config()).toHaveProperty(testKey, testValue);
+            });
+
+            test("is settible with string value and returns a RegExp", () => {
+                const testKey = "RegExpVersion";
+                const testValue = "\\d\\.\\d\\.\\d";
+                const expected = new RegExp(testValue, "i");
+                const utl = new ReleaseBranchUtilities({ [testKey]: testValue });
+
+                expect(utl.config(testKey)).toEqual(expected);
+            });
         });
     });
 
