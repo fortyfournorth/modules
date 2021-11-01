@@ -49,6 +49,7 @@ class ReleaseBranchUtilities {
         }
     }
 
+    //@ts-ignore
     public config(): Readonly<IReleaseBranchUtilitiesConfig>;
     public config(data: Partial<IReleaseBranchUtilitiesConfig>): this;
     public config(key: keyof IReleaseBranchUtilitiesConfig): string;
