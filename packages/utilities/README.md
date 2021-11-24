@@ -24,6 +24,26 @@ const value = "foo bar";
 console.log(capitalize(value)); // -> Foo bar
 ```
 
+## uppercase
+
+```js
+import { uppercase } from "@44north/utilities";
+
+const value = "foobar";
+
+console.log(uppercase(value)); // -> FOOBAR
+```
+
+## lowercase
+
+```js
+import { lowercase } from "@44north/utilities";
+
+const value = "FOOBAR";
+
+console.log(lowercase(value)); // -> foobar
+```
+
 ## camelCase
 
 ```js
@@ -195,3 +215,15 @@ if (contains(value, "oba")) {
 ```
 
 optionally, you can pass `RegExp` flags as a third parameter. case insenitive is on my default.
+
+## validatePageSlug
+
+returns if all segments of the provided URI are a slug.
+
+```js
+import { validatePageSlug } from "@44north/utilities";
+
+console.log(validatePageSlug("/foo/bar/baz")); // -> true
+console.log(validatePageSlug("/foo//bar/baz")); // -> false
+console.log(validatePageSlug("/foo/bar baz")); // -> false
+```

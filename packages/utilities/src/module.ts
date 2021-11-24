@@ -19,7 +19,7 @@ export const capitalize = (value: string) => {
 export const camelCase = (value: string) => {
     const type = typeof value;
     if (type !== "string") {
-        throw new Error(`Expected a string to be passed into capitalize. Got ${type}`);
+        throw new Error(`Expected a string to be passed into camelCase. Got ${type}`);
     }
 
     const split = value.split(new RegExp("[\\s_-]", "g")).filter((record) => record.length > 0);
@@ -43,12 +43,40 @@ export const camelCase = (value: string) => {
 export const pascalCase = (value: string) => {
     const type = typeof value;
     if (type !== "string") {
-        throw new Error(`Expected a string to be passed into capitalize. Got ${type}`);
+        throw new Error(`Expected a string to be passed into pascalCase. Got ${type}`);
     }
 
     const split = value.split(new RegExp("[\\s_-]", "g")).filter((record) => record.length > 0);
 
     return split.map((record) => capitalize(record)).join("");
+};
+
+/**
+ * Upper Case the provided string
+ * @param value The value to be Upper Cased
+ * @returns the value Upper Cased
+ */
+export const uppercase = (value: string) => {
+    const type = typeof value;
+    if (type !== "string") {
+        throw new Error(`Expected a string to be passed into uppercase. Got ${type}`);
+    }
+
+    return value.toUpperCase();
+};
+
+/**
+ * Lower Case the provided string
+ * @param value The value to be Lower Cased
+ * @returns the value Lower Cased
+ */
+export const lowercase = (value: string) => {
+    const type = typeof value;
+    if (type !== "string") {
+        throw new Error(`Expected a string to be passed into lowercase. Got ${type}`);
+    }
+
+    return value.toLowerCase();
 };
 
 /**
@@ -141,6 +169,28 @@ export const slugify = (value: string) =>
         .replace(new RegExp("[^a-z0-9-_]", "gi"), "-")
         .replace(new RegExp("-{2,}", "g"), "-")
         .replace(new RegExp("-?([a-z0-9][a-z0-9-_]{1,}[a-z0-9])-?", "g"), "$1");
+
+/**
+ * Validate if a string is a value slug.
+ *
+ * If a URI is passed, each segment of the URI is validated as a slug
+ *
+ * @param value the value to validate is a slug
+ */
+export const validatePageSlug = (value: string): boolean => {
+    if (typeof value !== "string") {
+        return false;
+    }
+
+    if (new RegExp("/{2,}", "g").test(value)) {
+        return false;
+    }
+
+    return String(value)
+        .split("/")
+        .filter((v) => v.length > 0)
+        .every((v) => slugify(v) === v);
+};
 
 /**
  * A Utiltity to validate if the provided string matches an valid email address pattern

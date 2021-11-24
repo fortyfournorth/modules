@@ -10,7 +10,10 @@ import {
     sortObjectArrayByKey,
     startsWith,
     endsWith,
-    contains
+    contains,
+    validatePageSlug,
+    uppercase,
+    lowercase
 } from "./module";
 
 describe("utilites", () => {
@@ -27,6 +30,38 @@ describe("utilites", () => {
             ${"foo bar"} | ${"Foo bar"}
         `(`returns the expected result for "$value"`, ({ value, expected }) => {
             expect(capitalize(value)).toMatch(expected);
+        });
+    });
+
+    describe("uppercase", () => {
+        test("throws an error if a none string is passed in", () => {
+            expect(() => {
+                // @ts-ignore
+                uppercase(true);
+            }).toThrowError(new RegExp("boolean", "i"));
+        });
+        test.each`
+            value        | expected
+            ${"foo"}     | ${"FOO"}
+            ${"foo bar"} | ${"FOO BAR"}
+        `(`returns the expected result for "$value"`, ({ value, expected }) => {
+            expect(uppercase(value)).toMatch(expected);
+        });
+    });
+
+    describe("lowercase", () => {
+        test("throws an error if a none string is passed in", () => {
+            expect(() => {
+                // @ts-ignore
+                lowercase(true);
+            }).toThrowError(new RegExp("boolean", "i"));
+        });
+        test.each`
+            value        | expected
+            ${"Foo"}     | ${"foo"}
+            ${"Foo Bar"} | ${"foo bar"}
+        `(`returns the expected result for "$value"`, ({ value, expected }) => {
+            expect(lowercase(value)).toMatch(expected);
         });
     });
 
@@ -555,6 +590,36 @@ describe("utilites", () => {
             );
             expect(sortedData[0]).toHaveProperty("diameterInches", lowText);
             expect(sortedData[sortedData.length - 1]).toHaveProperty("diameterInches", bigText);
+        });
+    });
+
+    describe("validatePageSlug", () => {
+        test.each`
+            value              | expected
+            ${"foo"}           | ${true}
+            ${"foo/bar"}       | ${true}
+            ${"foo/bar-baz"}   | ${true}
+            ${"foo/bar/baz"}   | ${true}
+            ${"/foo/bar/baz"}  | ${true}
+            ${"/foo/bar/baz"}  | ${true}
+            ${"foo/bar/baz/"}  | ${true}
+            ${"/foo/bar/baz/"} | ${true}
+            ${"foo/bar baz"}   | ${false}
+            ${"foo bar baz"}   | ${false}
+            ${"foo|bar"}       | ${false}
+            ${"foo?bar=baz"}   | ${false}
+            ${"foo//bar"}      | ${false}
+            ${"foo///bar"}     | ${false}
+            ${"foo\\bar"}      | ${false}
+            ${"foo|bar"}       | ${false}
+            ${1}               | ${false}
+            ${false}           | ${false}
+            ${undefined}       | ${false}
+            ${null}            | ${false}
+        `(`returns $expected for "$value"`, ({ value, expected }) => {
+            const result = validatePageSlug(value);
+            expect(result).toBeBoolean();
+            expect(result).toEqual(expected);
         });
     });
 });
