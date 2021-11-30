@@ -15,7 +15,16 @@ import Underline from "@tiptap/extension-underline";
  */
 export const generateHtmlFromJson: (json: Record<string, any>) => string = (json) => {
     try {
-        return generateHTML(json, [StarterKit, Image, Link, TextAlign, Underline]);
+        return generateHTML(json, [
+            StarterKit,
+            Image,
+            Link,
+            TextAlign.configure({
+                alignments: ["left", "center", "right"],
+                types: ["heading", "paragraph"]
+            }),
+            Underline
+        ]);
     } catch (e) {
         throw e;
     }
