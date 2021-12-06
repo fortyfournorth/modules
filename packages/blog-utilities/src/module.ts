@@ -6,6 +6,7 @@ import TextAlign from "@tiptap/extension-text-align";
 import Underline from "@tiptap/extension-underline";
 import TextStyle from "@tiptap/extension-text-style";
 import { Color } from "@tiptap/extension-color";
+import { Iframe } from "./extensions/Iframe";
 
 /**
  * Generates an HTML string from a passed JSON record
@@ -20,6 +21,7 @@ export const generateHtmlFromJson: (json: Record<string, any>) => string = (json
         return generateHTML(json, [
             StarterKit,
             Color,
+            Iframe,
             Image,
             Link,
             TextAlign.configure({
