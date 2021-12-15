@@ -16,13 +16,32 @@ import { Iframe } from "./extensions/Iframe";
  * @param json A JSON record passed to the function
  * @returns An HTML string
  */
+
 export const generateHtmlFromJson: (json: Record<string, any>) => string = (json) => {
     try {
-        return generateHTML(json, [
+        const test = generateHTML(json, [
             StarterKit,
             Color,
-            Iframe,
-            Image,
+            Iframe.extend({
+                addAttributes() {
+                    return {
+                        ...this.parent?.(),
+                        style: {
+                            default: ""
+                        }
+                    };
+                }
+            }),
+            Image.extend({
+                addAttributes() {
+                    return {
+                        ...this.parent?.(),
+                        style: {
+                            default: ""
+                        }
+                    };
+                }
+            }),
             Link,
             TextAlign.configure({
                 alignments: ["left", "center", "right"],
@@ -31,6 +50,7 @@ export const generateHtmlFromJson: (json: Record<string, any>) => string = (json
             TextStyle,
             Underline
         ]);
+        return test;
     } catch (e) {
         throw e;
     }
