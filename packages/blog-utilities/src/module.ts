@@ -1,4 +1,5 @@
 import { generateHTML } from "@tiptap/html";
+import { mergeAttributes } from "@tiptap/core";
 import StarterKit from "@tiptap/starter-kit";
 import Image from "@tiptap/extension-image";
 import Link from "@tiptap/extension-link";
@@ -19,7 +20,7 @@ import { Iframe } from "./extensions/Iframe";
 
 export const generateHtmlFromJson: (json: Record<string, any>) => string = (json) => {
     try {
-        const test = generateHTML(json, [
+        return generateHTML(json, [
             StarterKit,
             Color,
             Iframe.extend({
@@ -38,8 +39,20 @@ export const generateHtmlFromJson: (json: Record<string, any>) => string = (json
                         ...this.parent?.(),
                         style: {
                             default: ""
+                        },
+                        figCaption: {
+                            default: ""
                         }
                     };
+                },
+                renderHTML({ HTMLAttributes }) {
+                    const { style, src, alt, title, figCaption } = HTMLAttributes;
+                    return [
+                        "figure",
+                        { style },
+                        ["img", mergeAttributes(this.options.HTMLAttributes, { src, alt, title })],
+                        ["figcaption", "", figCaption]
+                    ];
                 }
             }),
             Link,
@@ -50,7 +63,6 @@ export const generateHtmlFromJson: (json: Record<string, any>) => string = (json
             TextStyle,
             Underline
         ]);
-        return test;
     } catch (e) {
         throw e;
     }
