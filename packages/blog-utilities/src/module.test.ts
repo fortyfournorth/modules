@@ -39,34 +39,28 @@ describe("Blog Utilities", () => {
                         type: "image",
                         attrs: {
                             src: "https://res.cloudinary.com/fortyfournorth/image/upload/v1639537158/Test/ru3ccsrgirrp0san6tbi.jpg",
-                            alt: "Female head shot",
+                            alt: "",
                             title: null,
-                            style: "float:left padding-right:1rem"
+                            style: "float:right; margin-left:0.5rem;width:75%;",
+                            figCaption: "Fig Caption Test"
                         }
                     },
                     {
                         type: "paragraph",
                         attrs: {
-                            textAlign: "right"
+                            textAlign: "left"
                         },
                         content: [
                             {
                                 type: "text",
-                                marks: [
-                                    {
-                                        type: "textStyle",
-                                        attrs: {
-                                            color: "rgba(220, 150, 150,1)"
-                                        }
-                                    }
-                                ],
-                                text: "What a wonderfull day it's"
+                                text: "Testing Value"
                             }
                         ]
                     }
                 ]
             };
-            const expectedHTML = `<img src="https://res.cloudinary.com/fortyfournorth/image/upload/v1639537158/Test/ru3ccsrgirrp0san6tbi.jpg" alt="Female head shot" style="float:left padding-right:1rem"><p style="text-align: right"><span style="color: rgba(220, 150, 150,1)">What a wonderfull day it&apos;s</span></p>`;
+            const expectedHTML = `<figure style="float:right; margin-left:0.5rem;width:75%;"><img src="https://res.cloudinary.com/fortyfournorth/image/upload/v1639537158/Test/ru3ccsrgirrp0san6tbi.jpg" alt=""><figcaption>Fig Caption Test</figcaption></figure><p>Testing Value</p>`;
+
             expect(generateHtmlFromJson(dummy)).toEqual(expectedHTML);
         });
 
