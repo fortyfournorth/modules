@@ -1,3 +1,5 @@
+[![44 North](https://res.cloudinary.com/fortyfournorth/image/upload/v1644103323/44North/ReadmeFileBanner_ixvgvr.jpg)](https://fortyfournorth.ca)
+
 # @44North ESLint Config
 
 The standard 44 North [ESLint](https://eslint.org/) Configuration.

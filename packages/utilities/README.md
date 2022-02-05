@@ -1,3 +1,5 @@
+[![44 North](https://res.cloudinary.com/fortyfournorth/image/upload/v1644103323/44North/ReadmeFileBanner_ixvgvr.jpg)](https://fortyfournorth.ca)
+
 # @44north/utilities
 
 A Module containing a number of small utilities to use in your applications
@@ -184,7 +186,7 @@ if (startsWith(value, "foo")) {
 }
 ```
 
-optionally, you can pass `RegExp` flags as a third parameter. case insenitive is on my default.
+optionally, you can pass `RegExp` flags as a third parameter. case insensitive is on my default.
 
 ## endsWith
 
@@ -199,7 +201,7 @@ if (endsWith(value, "bar")) {
 }
 ```
 
-optionally, you can pass `RegExp` flags as a third parameter. case insenitive is on my default.
+optionally, you can pass `RegExp` flags as a third parameter. case insensitive is on my default.
 
 ## contains
 
@@ -214,7 +216,7 @@ if (contains(value, "oba")) {
 }
 ```
 
-optionally, you can pass `RegExp` flags as a third parameter. case insenitive is on my default.
+optionally, you can pass `RegExp` flags as a third parameter. case insensitive is on my default.
 
 ## validatePageSlug
 

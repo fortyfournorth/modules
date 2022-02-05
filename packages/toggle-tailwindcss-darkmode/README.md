@@ -1,3 +1,5 @@
+[![44 North](https://res.cloudinary.com/fortyfournorth/image/upload/v1644103323/44North/ReadmeFileBanner_ixvgvr.jpg)](https://fortyfournorth.ca)
+
 # @44north/toggle-tailwindcss-darkmode
 
 A Module to aid in managing toggle-tailwindcss-darkmode in your applications

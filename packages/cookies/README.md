@@ -1,3 +1,5 @@
+[![44 North](https://res.cloudinary.com/fortyfournorth/image/upload/v1644103323/44North/ReadmeFileBanner_ixvgvr.jpg)](https://fortyfournorth.ca)
+
 # @44north/cookies
 
 A Module to aid in managing cookies in your applications
