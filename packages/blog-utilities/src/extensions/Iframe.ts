@@ -16,7 +16,7 @@ export interface IframeOptions {
     /**
      * Width of iframe
      */
-    width?: number;
+    width?: number | string;
     /**
      * Additional html attributes for iframe
      */
