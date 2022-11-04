@@ -302,6 +302,7 @@ describe("utilites", () => {
         // prettier-ignore
         test.each`
             value                               | expected
+            ${"jt@mws-solutions.com"}                 | ${true}
             ${"test@test.test"}                 | ${true}
             ${"test@test.test "}                | ${false}
             ${"test+test@test.test"}            | ${true}
