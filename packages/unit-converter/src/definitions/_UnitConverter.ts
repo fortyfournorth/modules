@@ -1,10 +1,10 @@
 /**
- * A Function to Convert a Value. Typically used when converting Imerperial to Metric Units
+ * A Function to Convert a Value. Typically used when converting Imperial to Metric Units
  */
 type ConversionFunction = (input: number) => number;
 
 /**
- * Contains the Infomration Requried to convert this unit to the anchor base unit
+ * Contains the Information Required to convert this unit to the anchor base unit
  */
 interface IUnitDetails {
     /**
@@ -28,7 +28,7 @@ interface IUnitDetails {
      * `0.01` which which generate the formula to be
      * ```js
      * const toBaseUnitValue = 42 * 0.01; // 0.42m
-     * comst fromBaseUnitValue = 0.42 / 0.01; // 42cm
+     * const fromBaseUnitValue = 0.42 / 0.01; // 42cm
      * ```
      */
     to_anchor: number | ConversionFunction;
@@ -36,7 +36,7 @@ interface IUnitDetails {
 }
 
 /**
- * Contains the Unit Information Requried for a Base Unit of Measure
+ * Contains the Unit Information Required for a Base Unit of Measure
  */
 type IUnits = Record<string, IUnitDetails>;
 // interface IUnits {
@@ -44,7 +44,7 @@ type IUnits = Record<string, IUnitDetails>;
 // }
 
 /**
- * Contains the information Requried to convert Metric values to Imperial and viceversa
+ * Contains the information Required to convert Metric values to Imperial and vice-versa
  */
 interface IAnchorValue {
     /**
@@ -58,7 +58,7 @@ interface IAnchorValue {
 }
 
 /**
- * Containst the Information for Unit Types Base Unit of Measure
+ * Contains the Information for Unit Types Base Unit of Measure
  */
 interface IAnchor {
     /**
@@ -66,7 +66,7 @@ interface IAnchor {
      */
     metric: IAnchorValue;
     /**
-     * Information for Imperical Base Unit of Measure
+     * Information for Imperial Base Unit of Measure
      */
     imperial: IAnchorValue;
 }
@@ -81,6 +81,8 @@ interface IUnitConverter {
     convert: (value: number, from?: any, to?: any) => number;
     from: (unit: any) => this;
     to: (unit: any) => number;
+    setPrecision: (value: number) => this;
+    getPrecision: () => number;
 }
 
 interface IUnitConverterConstructor<M extends IUnits, I extends IUnits> {
@@ -97,7 +99,7 @@ type AnyUnit<M extends Record<keyof M, IUnitDetails>, I extends Record<keyof I, 
     | keyof I;
 
 /**
- * Unit Converer Class
+ * Unit Converter Class
  */
 abstract class UnitConverter<M extends IUnits, I extends IUnits> implements IUnitConverter {
     /**
@@ -113,22 +115,27 @@ abstract class UnitConverter<M extends IUnits, I extends IUnits> implements IUni
      */
     abstract name: string;
     /**
-     * This UnitConverteres Anchor Details for Conversions
+     * This UnitConverters Anchor Details for Conversions
      */
     abstract anchors: IAnchor;
 
     /**
-     * Identifies the Unit to Conver the Value From
+     * Identifies the Unit to Convert the Value From
      */
     protected fromUnit: AnyUnit<M, I> | undefined = undefined;
     /**
-     * Identifies the Unit to Conver the Value To
+     * Identifies the Unit to Convert the Value To
      */
     protected toUnit: AnyUnit<M, I> | undefined = undefined;
     /**
-     * The Value that is being Convereted
+     * The Value that is being Converted
      */
     protected value: number | undefined = undefined;
+
+    /**
+     * The Maximum Precision to utilize
+     */
+    protected precision: number = 10;
 
     constructor(from: AnyUnit<M, I> = "", to: AnyUnit<M, I> = "") {
         if (String(from).length > 0) {
@@ -185,11 +192,14 @@ abstract class UnitConverter<M extends IUnits, I extends IUnits> implements IUni
      * @param unit The Current Unit
      */
     private toBaseUnit(value: number, unit: IUnitDetails): number {
+        let result = 0;
         if (typeof unit.to_anchor === "function") {
-            return unit.to_anchor(value);
+            result = unit.to_anchor(value);
         } else {
-            return value * unit.to_anchor;
+            result = value * unit.to_anchor;
         }
+
+        return Number(Number(result).toFixed(this.precision));
     }
 
     /**
@@ -198,19 +208,23 @@ abstract class UnitConverter<M extends IUnits, I extends IUnits> implements IUni
      * @param unit The Current Unit
      */
     private fromBaseUnit(value: number, unit: IUnitDetails): number {
+        let result = 0;
+
         if (unit.from_anchor) {
             if (typeof unit.from_anchor === "function") {
-                return unit.from_anchor(value);
+                result = unit.from_anchor(value);
             } else {
-                return value / unit.from_anchor;
+                result = value / unit.from_anchor;
             }
         } else {
             if (typeof unit.to_anchor === "function") {
-                return unit.to_anchor(value);
+                result = unit.to_anchor(value);
             } else {
-                return value / unit.to_anchor;
+                result = value / unit.to_anchor;
             }
         }
+
+        return Number(Number(result).toFixed(this.precision));
     }
 
     /**
@@ -269,8 +283,8 @@ abstract class UnitConverter<M extends IUnits, I extends IUnits> implements IUni
     }
 
     /**
-     * Programatically Convert a Value from one unit to another
-     * @param value Value to be Converterd
+     * Programmatically Convert a Value from one unit to another
+     * @param value Value to be Converted
      * @param from Unit to be Converted From
      * @param to Unit to be Converted To
      */
@@ -288,7 +302,7 @@ abstract class UnitConverter<M extends IUnits, I extends IUnits> implements IUni
     }
 
     /**
-     * Programatically set the From Unit
+     * Programmatically set the From Unit
      * @param unit Unit to Convert From
      */
     public setFromUnit(unit: AnyUnit<M, I>) {
@@ -298,7 +312,7 @@ abstract class UnitConverter<M extends IUnits, I extends IUnits> implements IUni
     }
 
     /**
-     * Programatically set the To Unit
+     * Programmatically set the To Unit
      * @param unit Unit to Convert To
      */
     public setToUnit(unit: AnyUnit<M, I>) {
@@ -308,7 +322,7 @@ abstract class UnitConverter<M extends IUnits, I extends IUnits> implements IUni
     }
 
     /**
-     * Programatically set the Value to be Converted
+     * Programmatically set the Value to be Converted
      * @param value The Value to Convert
      */
     public setValue(value: number) {
@@ -345,6 +359,27 @@ abstract class UnitConverter<M extends IUnits, I extends IUnits> implements IUni
         this.setToUnit(unit);
 
         return this.runConversion();
+    }
+
+    /**
+     * Set the Precision to Utilize when Calculating Values
+     * @param value the Precision Value
+     */
+    public setPrecision(value: number) {
+        if (Number(value) > 0 && Math.round(value) === value) {
+            this.precision = value;
+        } else {
+            throw new Error(`Expected an Integer to be passed into "setPrecision", got ${value}`);
+        }
+
+        return this;
+    }
+
+    /**
+     * See the Currently Set Precision on the Converter
+     */
+    public getPrecision() {
+        return this.precision;
     }
 }
 

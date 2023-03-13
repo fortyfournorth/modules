@@ -114,6 +114,8 @@ class DimensionConverter extends UnitConverter<IMetricDimensions, IImperialDimen
         }
     };
 
+    precision = 5;
+
     static convert(value: number) {
         return new this().setValue(value);
     }
