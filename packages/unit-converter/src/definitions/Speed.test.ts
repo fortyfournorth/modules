@@ -1,5 +1,5 @@
 import { SpeedConverter } from "./Speed";
-import { UnitConversionTest } from "./_UnitConverterTestHelpers";
+import { GetUnitsTest, UnitConversionTest } from "./_UnitConverterTestHelpers";
 
 describe("SpeedConverter", () => {
     describe.each`
@@ -11,4 +11,6 @@ describe("SpeedConverter", () => {
         UnitConversionTest(SpeedConverter, value, from, to, expected);
         UnitConversionTest(SpeedConverter, expected, to, from, value);
     });
+
+    GetUnitsTest(SpeedConverter);
 });

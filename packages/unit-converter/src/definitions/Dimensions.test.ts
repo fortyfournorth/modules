@@ -1,5 +1,5 @@
 import { DimensionConverter } from "./Dimensions";
-import { UnitConversionTest } from "./_UnitConverterTestHelpers";
+import { GetUnitsTest, UnitConversionTest } from "./_UnitConverterTestHelpers";
 
 describe("DimensionConverter", () => {
     describe.each`
@@ -16,4 +16,6 @@ describe("DimensionConverter", () => {
         UnitConversionTest(DimensionConverter, value, from, to, expected);
         UnitConversionTest(DimensionConverter, expected, to, from, value);
     });
+
+    GetUnitsTest(DimensionConverter);
 });

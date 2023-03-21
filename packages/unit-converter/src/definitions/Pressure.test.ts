@@ -1,5 +1,5 @@
 import { PressureConverter } from "./Pressure";
-import { UnitConversionTest } from "./_UnitConverterTestHelpers";
+import { GetUnitsTest, UnitConversionTest } from "./_UnitConverterTestHelpers";
 
 describe("PressureConverter", () => {
     describe.each`
@@ -14,4 +14,6 @@ describe("PressureConverter", () => {
         UnitConversionTest(PressureConverter, value, from, to, expected);
         UnitConversionTest(PressureConverter, expected, to, from, value);
     });
+
+    GetUnitsTest(PressureConverter);
 });

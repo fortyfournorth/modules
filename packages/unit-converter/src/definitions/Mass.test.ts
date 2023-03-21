@@ -1,5 +1,5 @@
 import { MassConverter } from "./Mass";
-import { UnitConversionTest } from "./_UnitConverterTestHelpers";
+import { GetUnitsTest, UnitConversionTest } from "./_UnitConverterTestHelpers";
 
 describe("MassConverter", () => {
     describe.each`
@@ -11,4 +11,6 @@ describe("MassConverter", () => {
         UnitConversionTest(MassConverter, value, from, to, expected);
         UnitConversionTest(MassConverter, expected, to, from, value);
     });
+
+    GetUnitsTest(MassConverter);
 });

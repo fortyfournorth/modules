@@ -1,6 +1,6 @@
 {
   "name": "@44north/unitconverter",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "The UnitConverter",
   "main": "./dist/module.js",
   "types": "./dist/module.d.ts",
@@ -26,13 +26,15 @@
     "lint": "tslint src/*.ts",
     "test": "jest --coverage",
     "watch": "jest --watch",
-    "dev": "jest --watch"
+    "dev": "jest --watch",
+    "readMe:text": "ts-node readMeContent.ts"
   },
   "devDependencies": {
     "@types/jest": "^24.0.23",
     "jest": "^24.9.0",
     "prettier": "^1.19.1",
     "ts-jest": "^24.2.0",
+    "ts-node": "^10.9.1",
     "tslint": "^5.20.1",
     "typescript": "^3.7.2"
   }

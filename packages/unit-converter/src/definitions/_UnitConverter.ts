@@ -83,6 +83,9 @@ interface IUnitConverter {
     to: (unit: any) => number;
     setPrecision: (value: number) => this;
     getPrecision: () => number;
+    getMetricUnits: () => Array<string>;
+    getImperialUnits: () => Array<string>;
+    getAllUnits: () => Array<string>;
 }
 
 interface IUnitConverterConstructor<M extends IUnits, I extends IUnits> {
@@ -380,6 +383,27 @@ abstract class UnitConverter<M extends IUnits, I extends IUnits> implements IUni
      */
     public getPrecision() {
         return this.precision;
+    }
+
+    /**
+     * The Metric Units of Measure defined on this Type
+     */
+    public getMetricUnits() {
+        return Object.keys(this.metric);
+    }
+
+    /**
+     * The Imperial Units of Measure defined on this Type
+     */
+    public getImperialUnits() {
+        return Object.keys(this.imperial);
+    }
+
+    /**
+     * The All of the Units of Measure defined on this Type
+     */
+    public getAllUnits() {
+        return [...this.getMetricUnits(), ...this.getImperialUnits()];
     }
 }
 

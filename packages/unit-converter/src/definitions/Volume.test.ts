@@ -1,5 +1,5 @@
 import { VolumeConverter } from "./Volume";
-import { UnitConversionTest } from "./_UnitConverterTestHelpers";
+import { GetUnitsTest, UnitConversionTest } from "./_UnitConverterTestHelpers";
 
 describe("VolumeConverter", () => {
     describe.each`
@@ -14,4 +14,6 @@ describe("VolumeConverter", () => {
         UnitConversionTest(VolumeConverter, value, from, to, expected);
         UnitConversionTest(VolumeConverter, expected, to, from, value);
     });
+
+    GetUnitsTest(VolumeConverter);
 });

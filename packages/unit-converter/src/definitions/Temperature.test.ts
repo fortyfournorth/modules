@@ -1,5 +1,5 @@
 import { TemperatureConverter } from "./Temperature";
-import { UnitConversionTest } from "./_UnitConverterTestHelpers";
+import { GetUnitsTest, UnitConversionTest } from "./_UnitConverterTestHelpers";
 
 describe("TemperatureConverter", () => {
     describe.each`
@@ -11,4 +11,6 @@ describe("TemperatureConverter", () => {
         UnitConversionTest(TemperatureConverter, value, from, to, expected);
         UnitConversionTest(TemperatureConverter, expected, to, from, value);
     });
+
+    GetUnitsTest(TemperatureConverter);
 });
